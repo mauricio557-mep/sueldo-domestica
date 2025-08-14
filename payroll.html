@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquidación de Sueldo - Gestor de Sueldos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="/static/css/nav.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #e9eef2; }
+        .card { background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .btn { transition: background-color 0.2s; }
+        .btn-green { background-color: #28a745; color: white; }
+        .btn-green:hover { background-color: #218838; }
+        .btn-blue { background-color: #007bff; color: white; }
+        .btn-blue:hover { background-color: #0069d9; }
+    </style>
+</head>
+<body class="p-4 sm:p-6">
+
+    <div class="max-w-4xl mx-auto">
+        <div id="loading" class="text-center py-20">
+            <p class="text-lg text-gray-600">Generando liquidación...</p>
+        </div>
+
+        <div id="payrollContainer" class="hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">Liquidación de Sueldo</h1>
+                    <p id="payrollPeriod" class="text-gray-600"></p>
+                </div>
+                <button id="backBtn" class="btn bg-gray-500 text-white font-bold py-2 px-4 rounded-md">&larr; Volver al Registro</button>
+            </div>
+
+            <!-- Resumen de la Liquidación -->
+            <div class="card p-6">
+                <h2 class="text-xl font-semibold mb-4 border-b pb-2">Resumen para <span id="employeeName" class="text-blue-600"></span></h2>
+                <table class="w-full text-sm">
+                    <tbody>
+                        <tr class="border-b"><td class="py-2 font-medium">Período:</td><td id="period" class="text-right"></td></tr>
+                        <tr class="border-b"><td class="py-2 font-medium">Horas Normales (<span id="totalNormalHours"></span> hs):</td><td id="subtotalNormal" class="text-right font-mono"></td></tr>
+                        <tr class="border-b"><td class="py-2 font-medium">Horas Extras 50% (<span id="totalExtra50Hours"></span> hs):</td><td id="subtotalExtra50" class="text-right font-mono"></td></tr>
+                        <tr class="border-b"><td class="py-2 font-medium">Horas Extras 100% (<span id="totalExtra100Hours"></span> hs):</td><td id="subtotalExtra100" class="text-right font-mono"></td></tr>
+                        <tr class="border-b"><td class="py-2 font-medium">Antigüedad (<span id="antiquityPercent"></span>%):</td><td id="antiquityBonus" class="text-right font-mono"></td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Otros Conceptos -->
+            <div class="card p-6">
+                <h2 class="text-xl font-semibold mb-4">Otros Conceptos</h2>
+                <div id="conceptsList" class="mb-4 space-y-2">
+                    <p class="text-sm text-gray-500 text-center">No hay conceptos adicionales.</p>
+                </div>
+                <form id="conceptForm" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                    <div class="md:col-span-2">
+                        <label for="conceptDescription" class="block text-sm font-medium">Descripción</label>
+                        <input type="text" id="conceptDescription" class="w-full p-2 border rounded-md mt-1">
+                    </div>
+                    <div>
+                        <label for="conceptAmount" class="block text-sm font-medium">Monto</label>
+                        <input type="number" id="conceptAmount" step="0.01" class="w-full p-2 border rounded-md mt-1">
+                    </div>
+                    <div>
+                        <label for="conceptType" class="block text-sm font-medium">Tipo</label>
+                        <select id="conceptType" class="w-full p-2 border rounded-md mt-1">
+                            <option value="addition">Suma (Adición)</option>
+                            <option value="deduction">Resta (Deducción)</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-3 flex items-center">
+                        <input type="checkbox" id="isNonRemunerative" class="h-4 w-4 rounded border-gray-300">
+                        <label for="isNonRemunerative" class="ml-2 block text-sm text-gray-900">Es un concepto No Remunerativo</label>
+                    </div>
+                    <button type="submit" class="btn btn-blue font-bold py-2 px-4 rounded-md w-full">Añadir Concepto</button>
+                </form>
+            </div>
+
+            <!-- Total Final -->
+            <div class="card p-6 flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold">TOTAL A PAGAR</h2>
+                    <p id="finalTotal" class="text-3xl font-bold text-green-600 font-mono">$0.00</p>
+                </div>
+                <button id="confirmPayrollBtn" class="btn btn-green font-bold py-3 px-6 rounded-lg text-lg">Confirmar y Guardar Liquidación</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="payroll.js"></script>
+</body>
+</html>

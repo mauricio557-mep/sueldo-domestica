@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <title>Registro - Gestor de Sueldos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ... (estilos existentes) ... */
+        .password-strength-meter {
+            height: 5px;
+            background-color: #eee;
+            border-radius: 5px;
+            margin-top: 8px;
+        }
+        .strength-bar {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+            width: 0%;
+        }
+        .strength-bar.strength-0 { width: 20%; background-color: #ef4444; }
+        .strength-bar.strength-1 { width: 40%; background-color: #f97316; }
+        .strength-bar.strength-2 { width: 60%; background-color: #eab308; }
+        .strength-bar.strength-3 { width: 80%; background-color: #84cc16; }
+        .strength-bar.strength-4 { width: 100%; background-color: #22c55e; }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+
+    <div class="max-w-md w-full mx-auto rounded-lg shadow-lg card p-8 space-y-6">
+        <div>
+            <h1 class="text-2xl font-bold text-center text-gray-800">Crear una Cuenta</h1>
+            <p class="text-center text-gray-600">Completa tus datos para registrarte</p>
+        </div>
+
+        <form id="registerForm" class="space-y-4">
+            <!-- ... (campos de nombre, apellido, email) ... -->
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Contraseña</label>
+                <input type="password" id="password" name="password" required class="w-full p-2 mt-1 border input-field rounded-md">
+                <div class="password-strength-meter">
+                    <div id="strengthBar" class="strength-bar"></div>
+                </div>
+                <p id="passwordFeedback" class="text-xs text-gray-500 mt-1"></p>
+            </div>
+            <div>
+                <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Confirmar Contraseña</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required class="w-full p-2 mt-1 border input-field rounded-md">
+            </div>
+            <div>
+                <button type="submit" id="submitButton" class="w-full btn-primary font-bold py-2 px-4 rounded-md transition-all duration-200" disabled>
+                    Registrarse
+                </button>
+            </div>
+        </form>
+        <div id="message" class="text-center text-sm"></div>
+        <div class="text-center text-sm">
+            <p>¿Ya tienes una cuenta? <a href="index.html" class="font-medium text-blue-600 hover:underline">Inicia sesión aquí</a></p>
+        </div>
+    </div>
+
+    <script src="register.js"></script>
+</body>
+</html>

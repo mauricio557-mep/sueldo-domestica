@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Gestor de Sueldos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/css/nav.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #2c4a65;
+            --color-bg-main: #e9eef2;
+            --color-bg-light: #ffffff;
+            --color-border: #cccccc;
+            --color-text-dark: #333333;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg-main);
+            color: var(--color-text-dark);
+        }
+        .card { background-color: var(--color-bg-light); border: 1px solid var(--color-border); }
+        .widget-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--color-text-dark);
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6">
+
+    <div class="max-w-7xl mx-auto">
+        <header id="mainHeader" class="main-header">
+             <div class="header-content">
+                <div>
+                    <h1 class="app-title">Dashboard</h1>
+                    <p class="text-sm text-blue-300">Resumen general de su actividad</p>
+                </div>
+                <div class="user-info">
+                    <a href="/profile.html" class="text-sm text-blue-300 hover:underline">Mi Perfil</a>
+                    <button id="logoutBtn" class="ml-4 text-sm font-semibold text-white hover:underline">Cerrar Sesión</button>
+                </div>
+            </div>
+        </header>
+        
+        <nav class="main-nav">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="/dashboard.html" class="active">Dashboard</a></li>
+                <li class="nav-item"><a href="/employees.html">Gestionar Empleados</a></li>
+            </ul>
+        </nav>
+
+        <div id="loading" class="text-center py-10">
+            <p class="text-gray-600">Cargando resumen...</p>
+        </div>
+
+        <div id="dashboardContainer" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Columna Principal -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="card rounded-lg p-6">
+                    <h2 class="widget-title">Resumen del Mes Actual</h2>
+                    <div id="summaryWidget" class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-center">
+                        <!-- Contenido del widget de resumen -->
+                    </div>
+                </div>
+                <div class="card rounded-lg p-6">
+                    <h2 class="widget-title">Actividad Reciente</h2>
+                    <div id="activityWidget" class="space-y-3">
+                        <!-- Contenido del widget de actividad -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna Lateral -->
+            <div class="lg:col-span-1 space-y-6">
+                <div class="card rounded-lg p-6">
+                    <h2 class="widget-title">Liquidaciones Pendientes</h2>
+                    <div id="pendingPayrollWidget" class="space-y-3">
+                        <!-- Contenido del widget de liquidaciones pendientes -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

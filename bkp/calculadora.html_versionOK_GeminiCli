@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Sueldo Detallada - Empleada Doméstica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #2c4a65;
+            --color-primary-light: #3a5a78;
+            --color-accent-green: #5cb85c;
+            --color-accent-green-dark: #449d44;
+            --color-accent-orange: #f0ad4e;
+            --color-accent-orange-dark: #ec971f;
+            --color-bg-main: #e9eef2;
+            --color-bg-light: #ffffff;
+            --color-border: #cccccc;
+            --color-text-dark: #333333;
+            --color-text-light: #ffffff;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg-main);
+            color: var(--color-text-dark);
+        }
+        .header-main {
+            background-color: var(--color-primary-light);
+            color: var(--color-text-light);
+        }
+        .btn-green {
+            background-color: var(--color-accent-green);
+            color: var(--color-text-light);
+            border-color: var(--color-accent-green-dark);
+        }
+        .btn-green:hover {
+            background-color: var(--color-accent-green-dark);
+        }
+        .btn-green:disabled {
+            background-color: #999;
+            cursor: not-allowed;
+        }
+        .btn-orange {
+            background-color: var(--color-accent-orange);
+            color: var(--color-text-dark);
+             border-color: var(--color-accent-orange-dark);
+        }
+        .btn-orange:hover {
+            background-color: var(--color-accent-orange-dark);
+        }
+        .btn-blue {
+            background-color: #337ab7;
+            color: white;
+        }
+        .btn-blue:hover {
+            background-color: #286090;
+        }
+        .input-field {
+            border-color: var(--color-border);
+        }
+        .card {
+            background-color: var(--color-bg-light);
+            border: 1px solid var(--color-border);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6">
+
+    <div class="max-w-6xl mx-auto rounded-lg shadow-lg overflow-hidden card">
+        <header class="header-main p-4 flex justify-between items-center">
+            <h1 class="text-xl sm:text-2xl font-bold">Calculadora Liquidación de Sueldo</h1>
+            <button id="calcularBtn" class="btn-green font-bold py-2 px-4 rounded-md border-b-2 transition-all duration-200" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
+                </svg>
+                Calcular Liquidación
+            </button>
+        </header>
+
+        <div class="p-4 md:p-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Columna de Inputs -->
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-700 border-b pb-2 mb-4">Datos de Liquidación</h2>
+                    <div class="space-y-4">
+                        <div class="p-4 border rounded-lg bg-gray-50">
+                            <h3 class="font-semibold text-gray-800 mb-2">1. Importar desde Google Sheets</h3>
+                            <p class="text-xs text-gray-600 mb-2">Para obtener el enlace, ve a tu planilla y haz clic en `Archivo > Compartir > Publicar en la web`. Elige tu hoja, selecciona `Valores separados por comas (.csv)` y copia el enlace generado.</p>
+                            <input type="text" id="sheetUrlInput" placeholder="Pega aquí el enlace .csv publicado" class="w-full p-2 border input-field rounded-md mb-3" value="https://docs.google.com/spreadsheets/d/e/2PACX-1vTt6Gl_7T1RFG8_Q5S17ztDcmlMYotcNrfo1IltQsIiu1GMkCePClJpXlV_qFH98eRQ7QJfzX9iMKwy/pub?gid=0&single=true&output=csv">
+                            <button id="importBtn" class="w-full btn-orange font-bold py-2 px-4 rounded-md border-b-2 transition-all duration-200">
+                                Importar Datos
+                            </button>
+                            <div id="importStatus" class="text-center text-sm mt-3 text-gray-500"></div>
+                        </div>
+
+                        <div class="p-4 border rounded-lg bg-gray-50">
+                            <h3 class="font-semibold text-gray-800 mb-2">2. Definir Bono</h3>
+                            <div class="flex items-center space-x-4">
+                                <label for="horasSemanales" class="block text-sm font-medium text-gray-700 flex-shrink-0">Horas Semanales</label>
+                                <select id="horasSemanales" class="w-full p-2 border input-field rounded-md bg-white transition focus:ring-2 focus:ring-blue-500">
+                                    <option value="0">Seleccione rango de horas</option>
+                                    <option value="1">0 a 12 horas</option>
+                                    <option value="2">12 a 16 horas</option>
+                                    <option value="3">Más de 16 horas</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna de Resultados -->
+                <div id="resultado" class="hidden">
+                    <div id="printableArea">
+                        <h2 class="text-lg font-semibold text-gray-700 border-b pb-2 mb-4">Resultados de la Liquidación</h2>
+                        
+                        <div id="error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4"></div>
+
+                        <div id="contenidoResultado" class="space-y-6">
+                            <!-- Detalle Retroactivo -->
+                            <div>
+                                <h3 class="font-semibold text-gray-600 mb-2">Desglose del Pago Retroactivo (Febrero - Junio 2025)</h3>
+                                <div class="overflow-x-auto bg-white rounded-lg border border-gray-200">
+                                    <table class="min-w-full text-sm text-left">
+                                        <thead class="bg-gray-100">
+                                            <tr>
+                                                <th class="p-2 font-medium">Mes</th>
+                                                <th class="p-2 font-medium">Horas</th>
+                                                <th class="p-2 font-medium">Adicional/hr</th>
+                                                <th class="p-2 font-medium text-right">Monto a Pagar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="retroactivoBody"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Resumen del Pago -->
+                            <div class="bg-gray-50 p-4 rounded-lg border">
+                                <h3 class="font-semibold text-gray-600 mb-3">Resumen del Pago Final en Julio</h3>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between items-center text-md">
+                                        <span class="text-gray-700">Sueldo de Julio <span class="text-xs text-blue-600 font-medium">(incl. 1% aumento)</span>:</span>
+                                        <span id="resSueldoJulio" class="font-semibold font-mono"></span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-md">
+                                        <span class="text-gray-700">Total Retroactivo:</span>
+                                        <span id="resRetroactivo" class="font-semibold font-mono"></span>
+                                    </div>
+                                     <div class="flex justify-between items-center text-md">
+                                        <span class="text-gray-700">Bono No Remunerativo:</span>
+                                        <span id="resBono" class="font-semibold font-mono"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Proyección Salarial -->
+                            <div>
+                                <h3 class="font-semibold text-gray-600 mb-2">Proyección Valor Hora (Próximos meses)</h3>
+                                <div class="bg-white p-3 rounded-lg border text-sm">
+                                    <ul class="space-y-1">
+                                        <li class="flex justify-between"><span>Valor Hora Agosto (+1%):</span> <strong id="proyAgosto" class="font-mono"></strong></li>
+                                        <li class="flex justify-between"><span>Valor Hora Septiembre (+1%):</span> <strong id="proySeptiembre" class="font-mono"></strong></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Total a Pagar -->
+                            <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-4 rounded-r-lg mt-4">
+                                <div class="flex justify-between items-center">
+                                    <p class="text-lg font-bold">TOTAL A PAGAR EN JULIO 2025</p>
+                                    <p id="resTotal" class="text-2xl font-bold font-mono"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="downloadPdfBtn" class="w-full mt-6 btn-blue font-bold py-2 px-4 rounded-md border-b-2 transition-all duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                        Descargar como PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Declaraciones de elementos del DOM
+            const importBtn = document.getElementById('importBtn');
+            const calcularBtn = document.getElementById('calcularBtn');
+            const resultadoDiv = document.getElementById('resultado');
+            const errorDiv = document.getElementById('error');
+            const contenidoResultadoDiv = document.getElementById('contenidoResultado');
+            const retroactivoBody = document.getElementById('retroactivoBody');
+            const importStatus = document.getElementById('importStatus');
+            const sheetUrlInput = document.getElementById('sheetUrlInput');
+            const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+
+            let importedData = null;
+
+            // Funciones auxiliares
+            const formatCurrency = (value) => {
+                return value.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 2 });
+            };
+            
+            const showError = (message) => {
+                errorDiv.textContent = message;
+                errorDiv.classList.remove('hidden');
+                contenidoResultadoDiv.classList.add('hidden');
+                resultadoDiv.classList.remove('hidden', 'fade-in');
+            };
+
+            // Lógica de importación
+            importBtn.addEventListener('click', () => {
+                const sheetURL = sheetUrlInput.value;
+                if (!sheetURL || !sheetURL.includes('docs.google.com/spreadsheets')) {
+                    importStatus.textContent = 'Por favor, pega un enlace válido de Google Sheets.';
+                    importStatus.classList.add('text-red-600');
+                    return;
+                }
+
+                importStatus.textContent = 'Importando datos...';
+                
+                Papa.parse(sheetURL, {
+                    download: true,
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: (results) => {
+                        if (results.data && results.data.length > 0 && 'Mes' in results.data[0] && 'Valor Hora' in results.data[0] && 'Horas Trabajadas' in results.data[0]) {
+                            importedData = results.data.map(row => ({
+                                mes: row['Mes'],
+                                valorHora: parseFloat(String(row['Valor Hora']).replace(",", ".")) || 0,
+                                horas: parseFloat(String(row['Horas Trabajadas']).replace(",", ".")) || 0
+                            }));
+                            importStatus.textContent = '¡Datos importados con éxito!';
+                            importStatus.classList.remove('text-red-600');
+                            importStatus.classList.add('text-green-600');
+                            calcularBtn.disabled = false;
+                        } else {
+                            importStatus.textContent = 'Error al importar. Verifique el enlace y el formato de la planilla.';
+                            importStatus.classList.remove('text-green-600');
+                            importStatus.classList.add('text-red-600');
+                        }
+                    },
+                    error: (err) => {
+                        importStatus.textContent = 'Error de red. No se pudo acceder a la planilla. Verifique que el enlace sea correcto y público.';
+                        importStatus.classList.remove('text-green-600');
+                        importStatus.classList.add('text-red-600');
+                    }
+                });
+            });
+
+            // Lógica de cálculo
+            calcularBtn.addEventListener('click', () => {
+                if (!importedData) {
+                    showError('Por favor, procesa un archivo primero.');
+                    return;
+                }
+
+                const eneroData = importedData.find(d => d.mes && d.mes.toLowerCase() === 'enero');
+                if (!eneroData || !eneroData.valorHora) {
+                    showError('No se encontró el "Valor Hora" de Enero en los datos importados. Es necesario para el cálculo.');
+                    return;
+                }
+                const valorHoraEneroBase = eneroData.valorHora;
+
+                const opcionHorasSemanales = parseInt(document.getElementById('horasSemanales').value);
+                if (opcionHorasSemanales === 0) {
+                    showError('Por favor, seleccione el rango de horas semanales para calcular el bono.');
+                    return;
+                }
+                
+                errorDiv.classList.add('hidden');
+                contenidoResultadoDiv.classList.remove('hidden');
+                retroactivoBody.innerHTML = ''; 
+
+                const AUMENTO_FEB_JUN = 0.035;
+                const AUMENTO_MENSUAL = 0.01; // 1% for July, Aug, Sep
+
+                const valorHoraBaseFebJun = valorHoraEneroBase * (1 + AUMENTO_FEB_JUN);
+                const valorHoraJulio = valorHoraBaseFebJun * (1 + AUMENTO_MENSUAL);
+                const valorHoraAgosto = valorHoraJulio * (1 + AUMENTO_MENSUAL);
+                const valorHoraSeptiembre = valorHoraAgosto * (1 + AUMENTO_MENSUAL);
+
+                let totalRetroactivo = 0;
+                const adicionalPorHora = valorHoraEneroBase * AUMENTO_FEB_JUN;
+                
+                const monthsForRetro = ['febrero', 'marzo', 'abril', 'mayo', 'junio'];
+                importedData.forEach(data => {
+                    if (data.mes && monthsForRetro.includes(data.mes.toLowerCase()) && data.horas > 0) {
+                        const adicionalMensual = adicionalPorHora * data.horas;
+                        totalRetroactivo += adicionalMensual;
+                        const row = `
+                            <tr class="border-b border-gray-100">
+                                <td class="p-2">${data.mes}</td>
+                                <td class="p-2 font-mono text-center">${data.horas}</td>
+                                <td class="p-2 font-mono text-xs">${formatCurrency(adicionalPorHora)}</td>
+                                <td class="p-2 font-mono text-right text-green-700 font-semibold">${formatCurrency(adicionalMensual)}</td>
+                            </tr>
+                        `;
+                        retroactivoBody.innerHTML += row;
+                    }
+                });
+
+                const julioData = importedData.find(d => d.mes && d.mes.toLowerCase() === 'julio');
+                const horasJulio = julioData ? julioData.horas : 0;
+                const sueldoJulio = valorHoraJulio * horasJulio;
+
+                let bono = 0;
+                switch (opcionHorasSemanales) {
+                    case 1: bono = 4000; break;
+                    case 2: bono = 7000; break;
+                    case 3: bono = 10000; break;
+                }
+
+                const totalAPagar = sueldoJulio + totalRetroactivo + bono;
+
+                document.getElementById('resSueldoJulio').textContent = formatCurrency(sueldoJulio);
+                document.getElementById('resRetroactivo').textContent = formatCurrency(totalRetroactivo);
+                document.getElementById('resBono').textContent = formatCurrency(bono);
+                document.getElementById('resTotal').textContent = formatCurrency(totalAPagar);
+                document.getElementById('proyAgosto').textContent = formatCurrency(valorHoraAgosto);
+                document.getElementById('proySeptiembre').textContent = formatCurrency(valorHoraSeptiembre);
+
+                resultadoDiv.classList.remove('hidden');
+                resultadoDiv.classList.add('fade-in');
+            });
+
+            // Lógica de descarga de PDF
+            downloadPdfBtn.addEventListener('click', () => {
+                const { jsPDF } = window.jspdf;
+                const printableArea = document.getElementById('printableArea');
+                
+                html2canvas(printableArea, { scale: 2 }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                    pdf.save('Liquidacion-Julio-2025.pdf');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

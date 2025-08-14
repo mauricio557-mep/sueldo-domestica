@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Horas - Gestor de Sueldos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="/static/css/nav.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ... (estilos existentes de la página) ... */
+    </style>
+</head>
+<body class="p-4 sm:p-6">
+
+    <div class="max-w-7xl mx-auto">
+        <header id="mainHeader" class="main-header">
+            <div class="header-content">
+                <div>
+                    <h1 id="pageTitle" class="app-title">Cargando...</h1>
+                    <a href="/employees.html" class="text-sm text-blue-300 hover:underline">&larr; Volver a la lista de empleados</a>
+                </div>
+                <div id="userInfo" class="user-info">
+                    <!-- El email y el botón de logout se insertarán aquí -->
+                </div>
+            </div>
+        </header>
+        <nav id="mainNav" class="main-nav">
+            <!-- La navegación se generará dinámicamente -->
+        </nav>
+
+        <div id="loading" class="text-center py-20">
+            <p class="text-lg text-gray-600">Cargando datos...</p>
+        </div>
+
+        <div id="appContainer" class="hidden">
+            <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <button id="prevMonthBtn" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600">&lt; Anterior</button>
+                    <h2 id="currentMonthDisplay" class="text-xl font-semibold"></h2>
+                    <button id="nextMonthBtn" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600">Siguiente &gt;</button>
+                </div>
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="p-2 text-left">Día</th>
+                            <th class="p-2 text-left">Horas Normales</th>
+                            <th class="p-2 text-left">Horas Extra (50%)</th>
+                            <th class="p-2 text-left">Horas Extra (100%)</th>
+                            <th class="p-2 text-left">Descripción</th>
+                            <th class="p-2 text-right">Subtotal</th>
+                            <th class="p-2 text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trackerGridBody">
+                        <!-- Las filas del calendario se generarán aquí -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-6 p-4 bg-white rounded-lg shadow-md flex justify-between items-center">
+                <div class="flex gap-8 items-center">
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">Valor Hora Aplicado</h3>
+                        <div id="valorHoraWidget" class="flex items-center gap-2"></div>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">Total Horas del Mes</h3>
+                        <p id="totalHorasWidget" class="text-2xl font-bold text-gray-800">0.00</p>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-medium text-gray-500">Importe Acumulado</h3>
+                        <p id="importeAcumuladoWidget" class="text-2xl font-bold text-gray-800">$0.00</p>
+                    </div>
+                </div>
+                <button id="generatePayrollBtn" class="bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 transition-colors">
+                    Generar Liquidación
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/nav.js?v=${new Date().getTime()}"></script>
+    <script src="tracker.js?v=${new Date().getTime()}"></script>
+</body>
+</html>

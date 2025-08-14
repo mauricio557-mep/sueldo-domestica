@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Legislación - Gestor de Sueldos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #2c4a65;
+            --color-primary-light: #3a5a78;
+            --color-bg-main: #e9eef2;
+            --color-bg-light: #ffffff;
+            --color-border: #cccccc;
+            --color-text-dark: #333333;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg-main);
+            color: var(--color-text-dark);
+        }
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: var(--color-primary-light);
+        }
+        .input-field {
+            border-color: var(--color-border);
+        }
+        .card {
+            background-color: var(--color-bg-light);
+            border: 1px solid var(--color-border);
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6">
+
+    <div class="max-w-4xl mx-auto">
+        <header class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">Gestión de Escalas Salariales</h1>
+            <a href="employees.html" class="text-sm text-blue-600 hover:underline">&larr; Volver a la Lista de Empleados</a>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Columna del Formulario -->
+            <div class="lg:col-span-1">
+                <div class="card rounded-lg p-6">
+                    <h2 class="text-xl font-semibold mb-4">Cargar Nueva Escala</h2>
+                    <form id="legislationForm" class="space-y-4">
+                        <div>
+                            <label for="category_id" class="block text-sm font-medium text-gray-700">Categoría</label>
+                            <select id="category_id" name="category_id" required class="w-full p-2 mt-1 border input-field rounded-md bg-white">
+                                <option value="">Cargando...</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="valor_hora" class="block text-sm font-medium text-gray-700">Valor por Hora (ARS)</label>
+                            <input type="number" id="valor_hora" name="valor_hora" step="0.01" required placeholder="Ej: 2500.50" class="w-full p-2 mt-1 border input-field rounded-md">
+                        </div>
+                        <div>
+                            <label for="fecha_vigencia_desde" class="block text-sm font-medium text-gray-700">Vigente Desde</label>
+                            <input type="date" id="fecha_vigencia_desde" name="fecha_vigencia_desde" required class="w-full p-2 mt-1 border input-field rounded-md">
+                        </div>
+                         <div>
+                            <label for="descripcion" class="block text-sm font-medium text-gray-700">Descripción (Opcional)</label>
+                            <input type="text" id="descripcion" name="descripcion" placeholder="Ej: Acuerdo Salarial Julio 2025" class="w-full p-2 mt-1 border input-field rounded-md">
+                        </div>
+                        <div>
+                            <button type="submit" class="w-full btn-primary font-bold py-2 px-4 rounded-md">
+                                Guardar Escala
+                            </button>
+                        </div>
+                    </form>
+                    <div id="formMessage" class="text-center text-sm mt-4"></div>
+                </div>
+            </div>
+
+            <!-- Columna de la Tabla -->
+            <div class="lg:col-span-2">
+                <div class="card rounded-lg p-6">
+                    <h2 class="text-xl font-semibold mb-4">Historial de Escalas Cargadas</h2>
+                    <div id="tableLoading" class="text-center text-gray-600">Cargando historial...</div>
+                    <div id="scalesTableContainer" class="hidden overflow-x-auto">
+                        <table class="min-w-full text-sm">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="p-2 text-left font-medium">Categoría</th>
+                                    <th class="p-2 text-left font-medium">Valor Hora</th>
+                                    <th class="p-2 text-left font-medium">Vigencia</th>
+                                    <th class="p-2 text-left font-medium">Descripción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="scalesTableBody">
+                                <!-- Filas se insertarán dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="legislation.js"></script>
+</body>
+</html>

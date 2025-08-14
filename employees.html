@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Empleados - Gestor de Sueldos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #2c4a65;
+            --color-primary-light: #3a5a78;
+            --color-secondary: #4a5568;
+            --color-bg-main: #e9eef2;
+            --color-bg-light: #ffffff;
+            --color-border: #cccccc;
+            --color-text-dark: #333333;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg-main);
+            color: var(--color-text-dark);
+        }
+        .btn { transition: all 0.2s ease-in-out; }
+        .btn-primary { background-color: var(--color-primary); color: white; }
+        .btn-primary:hover { background-color: var(--color-primary-light); }
+        .btn-secondary { background-color: var(--color-secondary); color: white; }
+        .btn-secondary:hover { background-color: #606c80; }
+        .card { background-color: var(--color-bg-light); border: 1px solid var(--color-border); }
+    </style>
+</head>
+<body class="p-4 sm:p-6">
+
+    <div class="max-w-4xl mx-auto">
+        <header id="mainHeader" class="main-header">
+             <div class="header-content">
+                <div>
+                    <h1 class="app-title">Gestión de Empleados</h1>
+                    <p class="text-sm text-blue-300">Añada, edite y gestione sus empleados</p>
+                </div>
+                <div class="user-info">
+                    <a href="/profile.html" class="text-sm text-blue-300 hover:underline">Mi Perfil</a>
+                    <button id="logoutBtn" class="ml-4 text-sm font-semibold text-white hover:underline">Cerrar Sesión</button>
+                </div>
+            </div>
+        </header>
+        
+        <nav class="main-nav">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="/dashboard.html">Dashboard</a></li>
+                <li class="nav-item"><a href="/employees.html" class="active">Gestionar Empleados</a></li>
+            </ul>
+        </nav>
+
+        <div class="mb-6 text-right">
+             <a href="setup.html" class="btn btn-primary font-bold py-2 px-4 rounded-md">
+                + Añadir Nuevo Empleado
+            </a>
+        </div>
+
+        <div id="loading" class="text-center py-10">
+            <p class="text-gray-600">Cargando empleados...</p>
+        </div>
+
+        <div id="employeesList" class="space-y-4">
+            <!-- Los perfiles de los empleados se insertarán aquí -->
+        </div>
+        
+        <div id="emptyState" class="hidden text-center py-10 card rounded-lg">
+            <p class="text-gray-600">Aún no has añadido ningún empleado.</p>
+            <a href="setup.html" class="mt-4 inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700">
+                Añadir tu primer empleado
+            </a>
+        </div>
+
+    </div>
+
+    <script src="employees.js?v=${new Date().getTime()}"></script>
+    <script src="/static/js/nav.js"></script>
+</body>
+</html>

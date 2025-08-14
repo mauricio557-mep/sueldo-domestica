@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificar Cuenta - Calculadora de Sueldo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #2c4a65;
+            --color-primary-light: #3a5a78;
+            --color-bg-main: #e9eef2;
+            --color-bg-light: #ffffff;
+            --color-border: #cccccc;
+            --color-text-dark: #333333;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg-main);
+            color: var(--color-text-dark);
+        }
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: var(--color-primary-light);
+        }
+        .input-field {
+            border-color: var(--color-border);
+        }
+        .card {
+            background-color: var(--color-bg-light);
+            border: 1px solid var(--color-border);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+
+    <div class="max-w-md w-full mx-auto rounded-lg shadow-lg overflow-hidden card p-8 space-y-6">
+        <div>
+            <h1 class="text-2xl font-bold text-center text-gray-800">Verificar tu Cuenta</h1>
+            <p id="infoText" class="text-center text-gray-600">Hemos enviado un código de 4 dígitos a tu email. Por favor, ingrésalo a continuación.</p>
+        </div>
+
+        <form id="verifyForm" class="space-y-4">
+            <div>
+                <label for="code" class="block text-sm font-medium text-gray-700">Código de Verificación</label>
+                <input type="text" id="code" name="code" required maxlength="4"
+                       class="w-full p-2 mt-1 border input-field rounded-md text-center text-lg tracking-widest">
+            </div>
+            <div>
+                <button type="submit" class="w-full btn-primary font-bold py-2 px-4 rounded-md transition-all duration-200">
+                    Verificar y Activar Cuenta
+                </button>
+            </div>
+        </form>
+        <div id="message" class="text-center text-sm"></div>
+    </div>
+
+    <script src="verify.js"></script>
+</body>
+</html>

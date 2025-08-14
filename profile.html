@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Gestor de Sueldos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #2c4a65;
+            --color-bg-main: #e9eef2;
+            --color-bg-light: #ffffff;
+            --color-border: #cccccc;
+            --color-text-dark: #333333;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg-main);
+            color: var(--color-text-dark);
+        }
+        .btn-primary { background-color: var(--color-primary); color: white; }
+        .btn-primary:hover { background-color: #3a5a78; }
+        .input-field { border-color: var(--color-border); }
+        .card { background-color: var(--color-bg-light); border: 1px solid var(--color-border); }
+        .password-strength-meter { height: 5px; background-color: #eee; border-radius: 5px; margin-top: 8px; }
+        .strength-bar { height: 100%; border-radius: 5px; transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out; width: 0%; }
+        .strength-bar.strength-0 { width: 20%; background-color: #ef4444; }
+        .strength-bar.strength-1 { width: 40%; background-color: #f97316; }
+        .strength-bar.strength-2 { width: 60%; background-color: #eab308; }
+        .strength-bar.strength-3 { width: 80%; background-color: #84cc16; }
+        .strength-bar.strength-4 { width: 100%; background-color: #22c55e; }
+    </style>
+</head>
+<body class="p-4 sm:p-6">
+
+    <div class="max-w-xl mx-auto">
+        <header class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">Mi Perfil</h1>
+            <a href="employees.html" class="text-sm text-blue-600 hover:underline">&larr; Volver a Empleados</a>
+        </header>
+
+        <div class="card rounded-lg p-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Cambiar Contraseña</h2>
+            <form id="changePasswordForm" class="space-y-4">
+                <!-- ... (formulario de cambio de contraseña) ... -->
+            </form>
+        </div>
+
+        <div class="card rounded-lg p-8 mt-8 border-t-4 border-red-500">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">Gestión de Datos</h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="font-medium">Copia de Seguridad</h3>
+                    <p class="text-sm text-gray-600 mb-2">Descarga una copia completa de la base de datos de tu aplicación.</p>
+                    <a href="/api/backup/download" class="btn bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700">Descargar Backup</a>
+                </div>
+                <div class="border-t pt-4">
+                    <h3 class="font-medium text-red-700">Restaurar Copia de Seguridad</h3>
+                    <p class="text-sm text-gray-600 mb-2">Sube un archivo de base de datos (.db) para restaurar todos los datos. <strong class="text-red-700">¡Atención! La acción es irreversible y reemplazará todos los datos actuales.</strong></p>
+                    <form id="restoreForm">
+                        <input type="file" name="backupFile" id="backupFile" accept=".db" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
+                        <div class="mt-4">
+                             <label for="confirmRestore" class="block text-sm font-medium text-gray-700">Para confirmar, escribe "restaurar"</label>
+                            <input type="text" id="confirmRestore" placeholder="restaurar" class="w-full p-2 mt-1 border input-field rounded-md">
+                        </div>
+                        <button type="submit" id="restoreButton" class="w-full mt-2 btn bg-red-600 text-white font-bold py-2 px-4 rounded-md hover:bg-red-700" disabled>Restaurar Datos</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="profile.js"></script>
+</body>
+</html>
